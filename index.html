@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Planes &amp; Prejudice | Pemberley Dogfight Replay</title>
+  <meta name="description" content="A neon operations-room replay of the Pemberley dogfight. Map + radar + event timeline." />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="sig">
+        <div class="kicker">OPERATION REPLAY CONSOLE</div>
+        <h1>Planes &amp; Prejudice</h1>
+        <div class="sub">Dogfight in the Skies Above Pemberley • Mission Replay • <span class="mono" id="clockLabel">T+00:00</span></div>
+      </div>
+
+      <div class="controls">
+        <div class="btnRow">
+          <button class="btn btnPrimary" id="btnPlay" type="button">PLAY</button>
+          <button class="btn" id="btnPause" type="button">PAUSE</button>
+          <button class="btn" id="btnRestart" type="button">RESTART</button>
+        </div>
+
+        <div class="speed">
+          <div class="speedTop">
+            <span class="mono">SPEED</span>
+            <span class="mono" id="speedLabel">8x</span>
+          </div>
+          <input id="speed" type="range" min="1" max="30" step="1" value="8" />
+          <div class="speedMarks mono"><span>1x</span><span>10x</span><span>30x</span></div>
+        </div>
+
+        <div class="toggles">
+          <label class="toggle mono"><input type="checkbox" id="toggleCRT" checked> CRT</label>
+          <label class="toggle mono"><input type="checkbox" id="toggleTrails" checked> TRAILS</label>
+          <label class="toggle mono"><input type="checkbox" id="toggleLabels" checked> LABELS</label>
+          <!-- Optional follow toggle: supported in JS if you add it -->
+          <!-- <label class="toggle mono"><input type="checkbox" id="toggleFollow"> FOLLOW</label> -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout" aria-label="Mission replay layout">
+    <!-- MAP PANEL -->
+    <section class="panel panelMap" aria-label="Strategic map panel">
+      <div class="panelHead">
+        <div>
+          <div class="panelTitle">STRATEGIC MAP</div>
+          <div class="panelMeta mono">London area • 1940-ish, with a 2026 neon OSINT filter</div>
+        </div>
+        <div class="panelBadges">
+          <span class="badge badgeCyan">RAF</span>
+          <span class="badge badgePink">ENEMY</span>
+          <span class="badge badgeLime">ASSET</span>
+        </div>
+      </div>
+
+      <div class="panelBody">
+        <div id="map" class="map"></div>
+        <div class="mapOverlay" aria-hidden="true">
+          <div class="mapChip mono" id="activeChip">ACTIVE: NONE</div>
+          <div class="mapChip mono" id="lossesChip">LOSSES: 0</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RADAR PANEL -->
+    <section class="panel panelRadar" aria-label="Radar scope panel">
+      <div class="panelHead">
+        <div>
+          <div class="panelTitle">RADAR SCOPE</div>
+          <div class="panelMeta mono">Sweep + contacts + callsigns • synced to replay clock</div>
+        </div>
+        <div class="panelBadges">
+          <span class="badge badgePurple">SCOPE</span>
+          <span class="badge badgeYellow">SECTOR PEMBERLEY</span>
+        </div>
+      </div>
+
+      <div class="panelBody">
+        <div class="radarStage" id="radarStage">
+          <canvas id="radar" width="900" height="560"></canvas>
+          <div class="radarHud mono" aria-hidden="true">
+            <div class="hudRow"><span>CONTACTS</span><span id="hudContacts">0</span></div>
+            <div class="hudRow"><span>ENGAGEMENTS</span><span id="hudEng">0</span></div>
+            <div class="hudRow"><span>KILLS</span><span id="hudKills">0</span></div>
+            <div class="hudRow"><span>STATUS</span><span id="hudStatus">ARMED</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIMELINE PANEL -->
+    <section class="panel panelTimeline" aria-label="Event timeline panel">
+      <div class="panelHead">
+        <div>
+          <div class="panelTitle">EVENT TIMELINE</div>
+          <div class="panelMeta mono">Ops log • fire events • impacts • losses • narrative beats</div>
+        </div>
+        <div class="panelBadges">
+          <span class="badge badgePink">LIVE LOG</span>
+        </div>
+      </div>
+
+      <div class="panelBody">
+        <div class="timeline" id="timeline" role="log" aria-live="polite" aria-relevant="additions"></div>
+      </div>
+    </section>
+
+    <!-- STATUS PANEL -->
+    <section class="panel panelStatus" aria-label="Operations status panel">
+      <div class="panelHead">
+        <div>
+          <div class="panelTitle">OPERATIONS STATUS</div>
+          <div class="panelMeta mono">Counts • meters • flags</div>
+        </div>
+        <div class="panelBadges">
+          <span class="badge badgeCyan">OPS</span>
+        </div>
+      </div>
+
+      <div class="panelBody">
+        <div class="statusGrid">
+          <div class="stat">
+            <div class="statLabel mono">ACTIVE TRACKS</div>
+            <div class="statValue" id="statTracks">0</div>
+            <div class="statHint mono">aircraft being rendered</div>
+          </div>
+
+          <div class="stat">
+            <div class="statLabel mono">BLITZ INTENSITY</div>
+            <div class="meter"><div class="meterFill" id="meterBlitz"></div></div>
+            <div class="statHint mono">driven by event density</div>
+          </div>
+
+          <div class="stat">
+            <div class="statLabel mono">LAST EVENT</div>
+            <div class="statValueSmall mono" id="statLast">—</div>
+            <div class="statHint mono">most recent trigger</div>
+          </div>
+
+          <div class="stat">
+            <div class="statLabel mono">SELECTED</div>
+            <div class="statValueSmall mono" id="statSel">NONE</div>
+            <div class="statHint mono">click aircraft on map</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot mono">
+    <div class="footRow">
+      <span>CONSOLE NOTE:</span>
+      <span>Run via a local server so <span class="kbd">mission.json</span> can be loaded.</span>
+      <span class="sep">•</span>
+      <span class="kbd">python -m http.server</span>
+      <span class="sep">•</span>
+      <span class="kbd">VS Code Live Server</span>
+    </div>
+  </footer>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+  <!-- Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
+
+  <script src="app.js"></script>
+</body>
+</html>

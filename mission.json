@@ -1,0 +1,259 @@
+{
+  "meta": {
+    "title": "Dogfight in the Skies Above Pemberley",
+    "author": "Hog Swallow",
+    "sector": "Pemberley / London",
+    "note": "Fictional replay script. WWII-flavored absurdity, modernized console aesthetic."
+  },
+  "duration_s": 150,
+  "center": {
+    "lat": 51.52,
+    "lng": -0.12
+  },
+  "aircraft": [
+    {
+      "id": "ELIZABETH",
+      "callsign": "BENNET-01",
+      "side": "RAF",
+      "icon": "\u2708",
+      "path": [
+        {
+          "t": 0,
+          "lat": 51.468,
+          "lng": -0.32
+        },
+        {
+          "t": 25,
+          "lat": 51.495,
+          "lng": -0.24
+        },
+        {
+          "t": 55,
+          "lat": 51.53,
+          "lng": -0.16
+        },
+        {
+          "t": 90,
+          "lat": 51.545,
+          "lng": -0.05
+        },
+        {
+          "t": 120,
+          "lat": 51.51,
+          "lng": 0.03
+        },
+        {
+          "t": 150,
+          "lat": 51.49,
+          "lng": -0.04
+        }
+      ]
+    },
+    {
+      "id": "JANE",
+      "callsign": "BENNET-02",
+      "side": "RAF",
+      "icon": "\u2708",
+      "path": [
+        {
+          "t": 0,
+          "lat": 51.458,
+          "lng": -0.28
+        },
+        {
+          "t": 32,
+          "lat": 51.488,
+          "lng": -0.21
+        },
+        {
+          "t": 70,
+          "lat": 51.52,
+          "lng": -0.11
+        },
+        {
+          "t": 110,
+          "lat": 51.515,
+          "lng": 0.02
+        },
+        {
+          "t": 150,
+          "lat": 51.5,
+          "lng": -0.02
+        }
+      ]
+    },
+    {
+      "id": "LYDIA",
+      "callsign": "BENNET-03",
+      "side": "RAF",
+      "icon": "\u2708",
+      "path": [
+        {
+          "t": 0,
+          "lat": 51.452,
+          "lng": -0.25
+        },
+        {
+          "t": 40,
+          "lat": 51.492,
+          "lng": -0.15
+        },
+        {
+          "t": 85,
+          "lat": 51.535,
+          "lng": -0.06
+        },
+        {
+          "t": 120,
+          "lat": 51.54,
+          "lng": 0.03
+        },
+        {
+          "t": 150,
+          "lat": 51.515,
+          "lng": 0.005
+        }
+      ]
+    },
+    {
+      "id": "GOTHA-1",
+      "callsign": "KRAUT-17",
+      "side": "ENEMY",
+      "icon": "\u2708",
+      "path": [
+        {
+          "t": 0,
+          "lat": 51.595,
+          "lng": -0.38
+        },
+        {
+          "t": 35,
+          "lat": 51.565,
+          "lng": -0.25
+        },
+        {
+          "t": 68,
+          "lat": 51.54,
+          "lng": -0.14
+        },
+        {
+          "t": 80,
+          "lat": 51.525,
+          "lng": -0.08
+        }
+      ]
+    },
+    {
+      "id": "FOKKER-2",
+      "callsign": "KRAUT-23",
+      "side": "ENEMY",
+      "icon": "\u2708",
+      "path": [
+        {
+          "t": 0,
+          "lat": 51.615,
+          "lng": -0.33
+        },
+        {
+          "t": 45,
+          "lat": 51.575,
+          "lng": -0.2
+        },
+        {
+          "t": 90,
+          "lat": 51.545,
+          "lng": -0.06
+        },
+        {
+          "t": 135,
+          "lat": 51.52,
+          "lng": 0.02
+        },
+        {
+          "t": 150,
+          "lat": 51.505,
+          "lng": 0.04
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "t": 5,
+      "type": "note",
+      "text": "Mary emits an air-raid siren impersonation. Radar status: OPERATIONAL."
+    },
+    {
+      "t": 14,
+      "type": "contact",
+      "text": "CONTACTS DETECTED: enemy formation entering NW sector."
+    },
+    {
+      "t": 28,
+      "type": "engagement",
+      "actor": "ELIZABETH",
+      "target": "GOTHA-1",
+      "text": "ELIZABETH opens fire. Vickers .303 rattle across the night."
+    },
+    {
+      "t": 34,
+      "type": "engagement",
+      "actor": "JANE",
+      "target": "FOKKER-2",
+      "text": "JANE establishes intercept vector. Netherfield departure confirmed."
+    },
+    {
+      "t": 48,
+      "type": "engagement",
+      "actor": "LYDIA",
+      "target": "FOKKER-2",
+      "text": "LYDIA returns to the air. Payload: 20lb Coopers. Temper: ungovernable."
+    },
+    {
+      "t": 66,
+      "type": "kill",
+      "actor": "ELIZABETH",
+      "target": "GOTHA-1",
+      "text": "TARGET DESTROYED: Gotha breaks apart and falls into the fields."
+    },
+    {
+      "t": 66.2,
+      "type": "impact",
+      "lat": 51.532,
+      "lng": -0.12,
+      "text": "IMPACT: fireball event recorded. Debris field expanding."
+    },
+    {
+      "t": 92,
+      "type": "engagement",
+      "actor": "JANE",
+      "target": "FOKKER-2",
+      "text": "JANE pours on speed. Bingley interest level: rising dangerously."
+    },
+    {
+      "t": 108,
+      "type": "kill",
+      "actor": "LYDIA",
+      "target": "FOKKER-2",
+      "text": "TARGET LOST: Fokker spirals down. Lydia cackles into the radio."
+    },
+    {
+      "t": 108.2,
+      "type": "impact",
+      "lat": 51.535,
+      "lng": -0.03,
+      "text": "IMPACT: smoke column observed. Fire crews: theoretical."
+    },
+    {
+      "t": 130,
+      "type": "loss",
+      "actor": "COLLINS",
+      "text": "MR. COLLINS: legs status NEGATIVE due to trenchfoot. Sacrifice noted."
+    },
+    {
+      "t": 148,
+      "type": "note",
+      "text": "Replay ends as the Bennets clear the sector. Rumor persists: carrots did it."
+    }
+  ]
+}
